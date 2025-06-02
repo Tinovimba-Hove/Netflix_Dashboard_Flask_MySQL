@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Shows by Year</h1>
+    <form method="POST">
+        Start Year: 
+        <select name="start_year" required>
+            <option value="">--Select Start Year--</option>
+            {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        End Year: 
+        <select name="end_year" required>
+            <option value="">--Select End Year--</option>
+            {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <input type="submit" value="Get Data"/>
+    </form>
+
+    {% if data.x and data.y %}
+        <div id="myDiv"></div>
+        <script>
+            var trace1 = {
+                x: {{ data.x|tojson|safe }},
+                y: {{ data.y|tojson|safe }},
+                type: 'bar'
+            };
+            
+            var layout = {
+                title: 'Number of Shows Released by Year',
+                height: 500,
+                width: 800
+            };
+
+            Plotly.newPlot('myDiv', [trace1], layout);
+        </script>
+    {% endif %}
+{% endblock %}

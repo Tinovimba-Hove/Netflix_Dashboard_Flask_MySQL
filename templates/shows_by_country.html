@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Shows by Country</h1>
+    <form method="POST">
+        Select Country: 
+        <select name="country" required>
+            <option value="">--Select a Country--</option>
+            {% for country in countries %}
+                <option value="{{ country }}">{{ country }}</option>
+            {% endfor %}
+        </select><br><br>
+        <input type="submit" value="Get Data"/>
+    </form>
+
+    {% if data.ratings.x and data.ratings.y %}
+        <div id="ratingsDiv"></div>
+        <script>
+            var ratingsTrace = {
+                labels: {{ data.ratings.x|tojson|safe }},
+                values: {{ data.ratings.y|tojson|safe }},
+                type: 'pie'
+            };
+            
+            var ratingsLayout = {
+                title: 'Number of Shows by Rating in {{ request.form["country"] }}',
+                height: 400,
+                width: 600
+            };
+
+            Plotly.newPlot('ratingsDiv', [ratingsTrace], ratingsLayout);
+        </script>
+    {% endif %}
+
+    {% if data.types.x and data.types.y %}
+        <div id="typesDiv"></div>
+        <script>
+            var typesTrace = {
+                x: {{ data.types.x|tojson|safe }},
+                y: {{ data.types.y|tojson|safe }},
+                type: 'bar'
+            };
+            
+            var typesLayout = {
+                title: 'Number of Shows by Type in {{ request.form["country"] }}',
+                height: 400,
+                width: 600
+            };
+
+            Plotly.newPlot('typesDiv', [typesTrace], typesLayout);
+        </script>
+    {% endif %}
+
+    {% if data.durations.x and data.durations.y %}
+        <div id="durationsDiv"></div>
+        <script>
+            var durationsTrace = {
+                x: {{ data.durations.x|tojson|safe }},
+                y: {{ data.durations.y|tojson|safe }},
+                type: 'bar'
+            };
+            
+            var durationsLayout = {
+                title: 'Number of Shows by Duration in {{ request.form["country"] }}',
+                height: 400,
+                width: 600
+            };
+
+            Plotly.newPlot('durationsDiv', [durationsTrace], durationsLayout);
+        </script>
+    {% endif %}
+{% endblock %}

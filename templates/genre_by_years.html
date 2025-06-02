@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Heatmap of Netflix Shows</h1>
+    <form method="POST">
+        <h3>Enter Genre Keyword:</h3>
+        <input type="text" name="listed_in" value="{{ genre_keyword }}" required placeholder="e.g., Crime, Comedies"/><br><br>
+
+        <h3>Select Year Range:</h3>
+        Start Year:
+        <select name="start_year" required>
+            <option value="">Select a year</option>
+            {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        End Year:
+        <select name="end_year" required>
+            <option value="">Select a year</option>
+            {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <input type="submit" value="Generate Heatmap"/>
+    </form></br>
+
+    {% if data %}
+        <h2>Heatmap for Genre: "{{ genre_keyword }}" </h2>
+        <div id="myHeatmap"></div>
+        <script>
+            var genres = {{ data | map(attribute='genre') | list | tojson | safe }};
+            var years = {{ data | map(attribute='year') | list | tojson | safe }};
+            var counts = {{ data | map(attribute='count') | list | tojson | safe }};
+
+            // Create a matrix for the heatmap
+            var heatmapData = [];
+            var uniqueGenres = [...new Set(genres)];
+            var uniqueYears = [...new Set(years)];
+
+            uniqueYears.forEach(year => {
+                var row = [];
+                uniqueGenres.forEach(genre => {
+                    var index = genres.indexOf(genre);
+                    var count = counts[index] || 0; // Default to 0 if not found
+                    row.push(count);
+                });
+                heatmapData.push(row);
+            });
+
+            var data = [{
+                z: heatmapData,
+                x: uniqueGenres,
+                y: uniqueYears,
+                type: 'heatmap',
+                colorscale: 'Viridis'
+            }];
+
+            var layout = {
+                title: 'Heatmap of Netflix Shows',
+                xaxis: { title: 'Genre' },
+                yaxis: { title: 'Year' },
+                height: 600,
+                width: 800
+            };
+
+            Plotly.newPlot('myHeatmap', data, layout);
+        </script>
+    {% endif %}
+{% endblock %}

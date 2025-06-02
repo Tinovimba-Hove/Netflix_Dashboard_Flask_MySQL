@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Pie Chart of Netflix Shows</h1>
+    <form method="POST">
+        Enter Genre Keyword:
+        <input type="text" name="listed_in" value="{{ listed_in }}" required placeholder="e.g., Crime, Comedies"/><br><br>
+
+        Start Year:
+        <select name="start_year" required>
+            <option value="">Select a year</option>
+            {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        End Year:
+        <select name="end_year" required>
+            <option value="">Select a year</option>
+            {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <input type="submit" value="Search"/>
+    </form>
+
+    {% if data %}
+        <h2>"{{ listed_in }}" from {{ year_range[0] }} to {{ year_range[1] }}</h2>
+        <div id="myPieChart"></div>
+        <script>
+            var trace1 = {
+                labels: {{ data | map(attribute='rating') | list | tojson | safe }},
+                values: {{ data | map(attribute='count') | list | tojson | safe }},
+                type: 'pie'
+            };
+
+            var layout = {
+                title: 'Distribution of Ratings',
+                height: 600,
+                width: 800
+            };
+
+            Plotly.newPlot('myPieChart', [trace1], layout);
+        </script>
+    {% endif %}
+{% endblock %}

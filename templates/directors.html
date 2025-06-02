@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Search for Director's Titles</h1>
+    <form method="POST">
+        <h3>Enter Director Keyword:</h3>
+        <input type="text" name="director_keyword" value="{{ director_keyword }}" required placeholder="e.g., Johnson, Tarantino"/><br><br>
+        <input type="submit" value="Search"/>
+    </form>
+
+    {% if results %}
+        <h2>Titles Directed by "{{ director_keyword }}"</h2>
+        <div id="myTable"></div>
+        <script>
+            var data = [{
+                type: 'table',
+                header: {
+                    values: [["Director"], ["Title"]],
+                    align: "center",
+                    font: {size: 12},
+                    height: 30,
+                    fill: {color: "#C2D4FF"}
+                },
+                cells: {
+                    values: [
+                        {{ results | map(attribute='director') | list | tojson | safe }},
+                        {{ results | map(attribute='title') | list | tojson | safe }}
+                    ],
+                    align: "center",
+                    font: {size: 11},
+                    height: 25,
+                    fill: {color: "#F5F8FF"}
+                }
+            }];
+
+            var layout = {
+                height: 400,
+                width: 600,
+                title: 'Directors and Their Titles'
+            };
+
+            Plotly.newPlot('myTable', data, layout);
+        </script>
+    {% endif %}
+{% endblock %}

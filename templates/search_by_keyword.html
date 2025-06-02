@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Search Shows by Keyword</h1>
+    <form method="POST">
+        Keywords To Describe The Show: <input type="text" name="keyword" required/><br><br>
+        <input type="submit" value="Search"/>
+    </form>
+
+    {% if data %}
+        <div id="myTable"></div>
+        <script>
+            var data = [{
+                type: 'table',
+                header: {
+                    values: [["<b>Title</b>"], ["<b>Description</b>"]],
+                    align: "center",
+                    line: {width: 1, color: 'black'},
+                    fill: {color: 'lightgrey'},
+                    font: {family: "Arial", size: 12, color: "black"}
+                },
+                cells: {
+                    values: [
+                        {{ data | map(attribute='title') | list | tojson | safe }},
+                        {{ data | map(attribute='description') | list | tojson | safe }}
+                    ],
+                    align: "left",
+                    line: {color: "black", width: 1},
+                    fill: {color: ['white', 'lightgrey']}
+                }
+            }];
+
+            var layout = {
+                title: 'Shows Containing Keyword: "{{ keyword }}"',
+                height: 'auto',
+                width: '100%',
+            };
+
+            Plotly.newPlot('myTable', data, layout);
+        </script>
+    {% endif %}
+{% endblock %}

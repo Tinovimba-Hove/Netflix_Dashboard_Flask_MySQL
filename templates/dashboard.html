@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1> Data Analytics Dashboard</h1>
+    <br>
+	<a href="/shows_by_country">Show Ratings By Country</a><br><br>
+	<a href="/shows_by_year">Shows By Release Year</a><br><br>
+	<a href="/directors">Directors and Shows they Directed</a><br><br>
+    <a href="/search_by_keyword">Shows by Description</a><br><br>
+	<a href="/pie_by_list_year">Show Ratings by Genre and Year</a><br><br>
+	<a href="/genre_by_years">Show Genre by Year</a><br><br>
+
+	<style>
+        body {
+            background-image: url('static/logo.png'); /* Path to your Netflix logo */
+            background-repeat: repeat;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+	
+{% endblock %}
