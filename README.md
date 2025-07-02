@@ -2,6 +2,8 @@
 
 This project is an interactive dashboard developed using Flask, a lightweight web framework in Python, and connected to a MySQL database. It aims to provide users with a dynamic way to explore and analyze Netflix data.
 
+[DEMO](https://drive.google.com/file/d/1baAjtfT90ddhDNOE6SGd-NwXxTUMZjYe/view?usp=sharing)
+
 ## Project Overview
 
 The Netflix Dashboard allows users to engage with data related to Netflix's offerings. Users can input their preferences through a series of forms, and the application responds by displaying customized insights and visualizations based on their selections. This project demonstrates the integration of back-end and front-end technologies to create a seamless user experience.
